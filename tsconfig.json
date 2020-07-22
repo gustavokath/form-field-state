@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "CommonJS",
     "target": "es5",
     "allowJs": true,
     "moduleResolution": "node",
