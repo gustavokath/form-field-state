@@ -26,26 +26,35 @@ describe('FormFielsState', () => {
     });
 
     test('should call validate function', () => {
-      const validateFuncMock = jest.fn();
+      const validateFuncMock = jest.fn(() => FORM_FIELD_NO_ERROR);
       const field = new FormFieldState('value');
       field.validate = validateFuncMock;
       field.setValue('newValue');
       expect(validateFuncMock).toBeCalled();
     });
+
+    test('should set error when validator has error validate function', () => {
+      const validateFuncMock = jest.fn(() => ({hasErrors: true, message: 'Error'}));
+      const field = new FormFieldState('value');
+      field.validate = validateFuncMock;
+      field.setValue('newValue');
+      expect(validateFuncMock).toBeCalled();
+      expect(field.hasErrors).toBeTruthy();
+    });
   });
 
-  describe('updateErros', () => {
+  describe('refresh', () => {
     const error: FormFieldError = {hasErrors: true, message: 'errorMessage'}
 
     test('should change hasErrors with received value', () => {
-      const field = new FormFieldState('value', undefined, undefined, false, null);
-      field.updateErros(error);
+      const field = new FormFieldState('value', () => error, undefined, false, null);
+      field.refresh();
       expect(field.hasErrors).toEqual(true);
     });
 
     test('should change errorMessage with received value', () => {
-      const field = new FormFieldState('value', undefined, undefined, false, null);
-      field.updateErros(error);
+      const field = new FormFieldState('value', () => error, undefined, false, null);
+      field.refresh();
       expect(field.errorMessage).toEqual('errorMessage');
     });
   });

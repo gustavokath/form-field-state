@@ -1,5 +1,6 @@
 import 'jest';
 import { useFormFieldState, FormFieldState, FORM_FIELD_NO_ERROR } from '../src';
+import { FormFieldError } from '../src/FromFieldError';
 
 const setStateFunc = jest.fn()
 jest.mock('react', () => ({
@@ -40,6 +41,18 @@ describe('useFormFieldState', () => {
       setFieldValue(newValue);
       expect(setStateFunc).toHaveBeenCalledWith(mockedField)
       expect(mockedField.value).toEqual(newValue)
+    })
+  })
+
+  describe('when refresh function is called', () => {
+    const error: FormFieldError = {hasErrors: true, message: 'errorMessage'}
+
+    it('should reevaulate validators', () => {
+      mockedField.validator = () => error
+      const [,,refreshField] = useFormFieldState<string>();
+      refreshField();
+      expect(setStateFunc).toHaveBeenCalledWith(mockedField)
+      expect(mockedField.hasErrors).toEqual(true)
     })
   })
 })
