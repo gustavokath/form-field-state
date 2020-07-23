@@ -26,18 +26,24 @@ class FormFieldState<T> {
     this.errorMessage = errorMessage;
   }
 
-  public validate(): void{
-    this.updateErros(this.validator(this));
+  public validate(): FormFieldError {
+    return this.validator(this);
   }
 
   public setValue(value: T): void {
     this.value = value;
-    this.validate();
+    this.updateErros(this.validate());
   }
 
-  public updateErros(error: FormFieldError) {
-    this.hasErrors = error.hasErrors;
-    this.errorMessage = error.message;
+  public refresh() {
+    return this.updateErros(this.validate());
+  }
+
+  private updateErros(error: FormFieldError) {
+    if (error) {
+      this.hasErrors = error.hasErrors;
+      this.errorMessage = error.message;
+    }
   }
 }
 
