@@ -1,6 +1,6 @@
 {
   "name": "form-field-state",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Control your fields states and properties made with React",
   "main": "dist/index.js",
   "author": "Gustavo Kath",
