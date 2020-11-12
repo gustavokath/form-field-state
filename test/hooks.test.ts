@@ -28,9 +28,12 @@ describe('useFormFieldState', () => {
     })
 
     it('should return provided field when initial state', () => {
-      const testField = new FormFieldState<string>('', () => FORM_FIELD_NO_ERROR);
-      const [field] = useFormFieldState(testField);
-      expect(field).toEqual(testField);
+      const validateFunction = () => FORM_FIELD_NO_ERROR;
+      const [field] = useFormFieldState('', validateFunction);
+      expect(field.value).toEqual('');
+      expect(field.validator).toEqual(validateFunction);
+      expect(field.dependentFields).toEqual({});
+      expect(field.hasErrors).toEqual(false);
     })
   });
 

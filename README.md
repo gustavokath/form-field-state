@@ -18,7 +18,7 @@ $ npm install form-field-state --save
 import {useFormFieldState, FormFieldState} from 'form-field-state';
 
 const YourComponent = () => {
-  const [field, setFieldValue] = useFormFieldState(new FormFieldState<string>(''))
+  const [field, setFieldValue] = useFormFieldState((''))
 
   return (
     <form>
@@ -45,7 +45,7 @@ const fieldValidator = (field: FormFieldState<string>) => {
 }
 
 const YourComponent = () => {
-  const [field, setFieldValue] = useFormFieldState(new FormFieldState<string>('', fieldValidator))
+  const [field, setFieldValue] = useFormFieldState('', fieldValidator)
 
   return (
     <form>

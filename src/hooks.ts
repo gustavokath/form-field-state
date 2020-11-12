@@ -1,13 +1,18 @@
 import { useState, Dispatch } from 'react';
-import FormFieldState from './FormFieldState';
+import FormFieldState, { DependentFieldMap } from './FormFieldState';
+import { FormFieldError } from './FromFieldError';
 
-const useFormFieldState = <S = undefined>(initialState: FormFieldState<S> = new FormFieldState<S>())
-  : [FormFieldState<S>, Dispatch<S>, () => void] => {
-  const [field, setField] = useState(initialState);
+const useFormFieldState = <S = undefined>(
+  value?: S | undefined,
+  validator?: (field: FormFieldState<S>) => FormFieldError,
+  dependentFields: DependentFieldMap = {},
+) : [FormFieldState<S>, Dispatch<S>, () => void] => {
+  const formFieldInitialState = new FormFieldState(value, validator, dependentFields);
+  const [field, setField] = useState(formFieldInitialState);
 
-  const setValue = (value: S) : void => {
+  const setValue = (newValue: S) : void => {
     const newState = Object.create(field);
-    newState.setValue(value);
+    newState.setValue(newValue);
     setField(newState);
   };
 
