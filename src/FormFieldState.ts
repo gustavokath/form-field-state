@@ -30,9 +30,13 @@ class FormFieldState<T> {
     return this.validator(this);
   }
 
-  public setValue(value: T): void {
-    this.value = value;
-    this.updateErros(this.validate());
+  public setValue(newValue: T): void {
+    const currentValue = this.value;
+    this.value = newValue;
+
+    if (currentValue !== newValue) {
+      this.updateErros(this.validate());
+    }
   }
 
   public refresh() {

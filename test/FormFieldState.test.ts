@@ -25,7 +25,7 @@ describe('FormFielsState', () => {
       expect(field.value).toEqual('newValue');
     });
 
-    test('should call validate function', () => {
+    test('should call validate function when value changes', () => {
       const validateFuncMock = jest.fn(() => FORM_FIELD_NO_ERROR);
       const field = new FormFieldState('value');
       field.validate = validateFuncMock;
@@ -33,13 +33,30 @@ describe('FormFielsState', () => {
       expect(validateFuncMock).toBeCalled();
     });
 
-    test('should set error when validator has error validate function', () => {
+    test('should set error when validator has error validate function when value changes', () => {
       const validateFuncMock = jest.fn(() => ({hasErrors: true, message: 'Error'}));
       const field = new FormFieldState('value');
       field.validate = validateFuncMock;
       field.setValue('newValue');
       expect(validateFuncMock).toBeCalled();
       expect(field.hasErrors).toBeTruthy();
+    });
+
+    test('should not call validate function when same value', () => {
+      const validateFuncMock = jest.fn(() => FORM_FIELD_NO_ERROR);
+      const field = new FormFieldState('value');
+      field.validate = validateFuncMock;
+      field.setValue('value');
+      expect(validateFuncMock).not.toBeCalled();
+    });
+
+    test('should not set error when validator has error validate function when same value', () => {
+      const validateFuncMock = jest.fn(() => ({hasErrors: true, message: 'Error'}));
+      const field = new FormFieldState('value');
+      field.validate = validateFuncMock;
+      field.setValue('value');
+      expect(validateFuncMock).not.toBeCalled();
+      expect(field.hasErrors).toBeFalsy();
     });
   });
 
